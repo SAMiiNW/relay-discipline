@@ -1,34 +1,60 @@
 # Relay Discipline
 
-Relay Discipline is a semantic custody-handoff network for human teams and autonomous agents. Operators seal a transfer packet containing its objective, destination, known risks, dependencies, recovery procedure, and supporting evidence. GenLayer validators decide whether custody can move safely or whether the packet needs acknowledgement, rerouting, completion, or rejection.
+### Semantic Handoff Protocol / `RD-PRIMARY`
 
-## Why GenLayer
+Systems rarely fail because nobody sent the handoff. They fail because the packet looked complete while the dangerous dependency stayed implicit.
 
-A handoff can contain every required field and still hide the dependency that makes it unsafe. Relay Discipline combines semantic validator review with deterministic enforcement. Consensus interprets operational meaning; the contract enforces immutable packets, protocol pinning, sender ownership, required obligations, recipient consistency, and safe decision backstops.
-
-## Transfer path
+Relay Discipline turns custody transfer into a visible network route. A packet leaves its origin, crosses ingress, pauses at a five-validator junction, and reaches its destination only with a decision that the receiving operator can inspect.
 
 ```text
-Origin → Ingress → Validator Junction → Destination
+◇ ORIGIN ═════ ◇ INGRESS ═════ ◇ JUNCTION ═════ ◇ DESTINATION
+  intent         checksum       5 validators      custody
 ```
 
-1. Connect a wallet on GenLayer Bradbury Testnet.
-2. Build and seal one handoff packet on-chain.
-3. Start validator inspection with a separate explicit action.
-4. Receive `READY`, `READY_WITH_ACK`, `REROUTE`, `INCOMPLETE`, or `REJECT`.
-5. Review missing obligations, risk, recommended destination, confidence, and rationale.
+## Packet anatomy
 
-## Contract
+A relay packet is not a message blob. It is a pinned protocol instance containing:
 
-- Network: GenLayer Bradbury Testnet (`4221`)
-- Address: `0xB8a401d77631EC7A2182D5cAb06d03dc649fB7D7`
-- Seeded protocol: `ops-handoff-v1`
-- Core methods: `create_protocol`, `submit_packet`, `inspect_handoff`, `get_protocol`, `get_packet`, `get_decision`, `get_packets_page`, `get_summary`
-- Explorer: https://explorer-bradbury.genlayer.com/
+```json
+{
+  "protocol": "ops-handoff-v1",
+  "recipient_class": "PAYMENTS",
+  "objective": "What responsibility is moving?",
+  "risks": ["What can break after transfer?"],
+  "dependencies": ["What must remain available?"],
+  "recovery": "How is custody safely reversed?",
+  "evidence": ["What supports the claim?"]
+}
+```
 
-The deployed protocol requires a clear objective, known risks, recovery path, and bounded dependencies. A validator result cannot remain `READY` when required obligations are missing, the recommended recipient conflicts with the packet, or high-risk recovery context is absent.
+Once sealed, the packet cannot be edited into a safer-looking version.
 
-## Run locally
+## Junction decision codes
+
+| Gate | Meaning |
+|---|---|
+| `READY` | Complete, correctly routed, and safe to transfer |
+| `READY_WITH_ACK` | Transfer is viable but the destination must acknowledge a condition |
+| `REROUTE` | Packet belongs to another recipient class |
+| `INCOMPLETE` | A required operational obligation is missing |
+| `REJECT` | The proposed transfer is unsafe or invalid |
+
+Consensus judges semantics; contract backstops enforce discipline. `READY` is automatically downgraded when required obligations are missing, the recommended recipient disagrees with the packet, or a high-risk handoff lacks recovery context.
+
+## Deployed route
+
+**Bradbury Testnet · Chain `4221`**
+
+```text
+Contract   0xB8a401d77631EC7A2182D5cAb06d03dc649fB7D7
+Protocol   ops-handoff-v1
+Deployer   0xCAFA30BF94D4fb01146588a1b7901BD85E7DbD0f
+Explorer   https://explorer-bradbury.genlayer.com/
+```
+
+The deployment script creates the contract and initializes the operational protocol as two sequential on-chain transactions.
+
+## Use the relay
 
 ```bash
 cd frontend
@@ -36,28 +62,55 @@ npm install
 npm run dev -- -p 3102
 ```
 
-Open http://localhost:3102 and connect Rabby or MetaMask. The interface switches to Bradbury automatically and keeps pending packet recovery scoped to the deployed contract.
+Open `http://localhost:3102`, connect a wallet, and follow the route:
 
-## Tests
+1. **Build handoff** — review the custody manifest.
+2. **Seal packet on-chain** — one wallet approval creates the immutable packet.
+3. **Request validator inspection** — a second deliberate approval starts consensus.
+4. **Read the junction decision** — gate, missing obligations, risk, route, and rationale appear in the decision rail.
+
+The two transactions are intentionally separate. A network error never causes an automatic resubmission, and a pending packet is stored under a contract-specific recovery key so switching deployments cannot duplicate it.
+
+## Protocol surface
+
+| Read path | Write path |
+|---|---|
+| `get_protocol` | `create_protocol` |
+| `get_packet` | `submit_packet` |
+| `get_decision` | `inspect_handoff` |
+| `get_packets_page` | — |
+| `get_summary` | — |
+
+## Adversarial checks
+
+The test suite is designed around unsafe handoffs, not only the happy path:
+
+- incomplete obligations cannot pass as ready;
+- a recipient mismatch forces rerouting;
+- the same packet cannot be inspected twice;
+- packet pagination and proof formatting remain stable;
+- protocol and packet identifiers cannot be duplicated.
+
+Run it with:
 
 ```bash
 python -m pytest -q
-cd frontend
-npm run build
 ```
 
-The suite covers the full relay lifecycle, pagination, proof format, duplicate inspection, missing-obligation enforcement, and recipient mismatch rerouting.
+Build the production topology with:
 
-## Structure
+```bash
+cd frontend && npm run build
+```
+
+## Components
 
 ```text
-contracts/   Intelligent Contract and deterministic backstops
-frontend/    Next.js topology interface
-scripts/     Deployment and protocol initialization
-tests/       Lifecycle and adversarial contract tests
+contracts/contract.py     protocol registry + semantic junction
+scripts/deploy.py         deploy + protocol seed
+tests/direct/             adversarial relay scenarios
+frontend/app/page.tsx     animated routing surface
+frontend/lib/chain.ts     Bradbury wallet transport
 ```
 
-## Transaction discipline
-
-Sealing and inspection are intentionally separate wallet actions. The frontend never auto-resubmits a write, prevents duplicate clicks while consensus is active, and resumes a pending packet without creating a second transaction.
-
+Relay Discipline is a protocol instrument, not a ticket board. Its central object is the transfer packet, its central moment is the validator junction, and its success condition is accountable custody.
