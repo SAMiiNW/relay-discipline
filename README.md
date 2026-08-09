@@ -6,6 +6,8 @@ Systems rarely fail because nobody sent the handoff. They fail because the packe
 
 Relay Discipline turns custody transfer into a visible network route. A packet leaves its origin, crosses ingress, pauses at a five-validator junction, and reaches its destination only with a decision that the receiving operator can inspect.
 
+**Enter the live relay:** https://relay-discipline.pages.dev
+
 ```text
 ◇ ORIGIN ═════ ◇ INGRESS ═════ ◇ JUNCTION ═════ ◇ DESTINATION
   intent         checksum       5 validators      custody
@@ -49,6 +51,7 @@ Consensus judges semantics; contract backstops enforce discipline. `READY` is au
 Contract   0xB8a401d77631EC7A2182D5cAb06d03dc649fB7D7
 Protocol   ops-handoff-v1
 Deployer   0xCAFA30BF94D4fb01146588a1b7901BD85E7DbD0f
+Live App   https://relay-discipline.pages.dev
 Explorer   https://explorer-bradbury.genlayer.com/
 ```
 
