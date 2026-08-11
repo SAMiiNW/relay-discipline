@@ -15,7 +15,7 @@ Relay Discipline turns custody transfer into a visible network route. A packet l
 
 ## Packet anatomy
 
-A relay packet is not a message blob. It is a pinned protocol instance containing:
+A relay packet is not a message blob. It is a pinned protocol instance containing independently fetched evidence and a recipient attestation:
 
 ```json
 {
@@ -25,7 +25,8 @@ A relay packet is not a message blob. It is a pinned protocol instance containin
   "risks": ["What can break after transfer?"],
   "dependencies": ["What must remain available?"],
   "recovery": "How is custody safely reversed?",
-  "evidence": ["What supports the claim?"]
+  "evidence_urls": ["Public, independently checkable operational record"],
+  "recipient_attestation_url": "Public recipient acceptance record"
 }
 ```
 
@@ -41,14 +42,16 @@ Once sealed, the packet cannot be edited into a safer-looking version.
 | `INCOMPLETE` | A required operational obligation is missing |
 | `REJECT` | The proposed transfer is unsafe or invalid |
 
-Consensus judges semantics; contract backstops enforce discipline. `READY` is automatically downgraded when required obligations are missing, the recommended recipient disagrees with the packet, or a high-risk handoff lacks recovery context.
+Consensus judges every outcome-driving field: protocol obligations, recipient class, objective, risks, dependencies, recovery, independently fetched evidence snapshots, and recipient attestation. The contract downgrades `READY` when obligations are missing, routing disagrees, or high-risk recovery is absent.
+
+Bradbury workflow verification: packet submission `0xe7d92647ff2947ed577ed41f59f96dbac861fa53c51c3c990449bc3173d7cff9`; validator inspection `0x004e023ca89dde21b73275f82559a877402b4c82184c43aacaf77b78a41012eb`.
 
 ## Deployed route
 
 **Bradbury Testnet · Chain `4221`**
 
 ```text
-Contract   0xB8a401d77631EC7A2182D5cAb06d03dc649fB7D7
+Contract   0x1EACD7324A6BFAE87851e740706BB5f48EC4705F
 Protocol   ops-handoff-v1
 Deployer   0xCAFA30BF94D4fb01146588a1b7901BD85E7DbD0f
 Live App   https://relay-discipline.pages.dev

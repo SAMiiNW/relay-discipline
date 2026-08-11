@@ -1,7 +1,7 @@
 'use client';
 import {createAccount,createClient} from 'genlayer-js';
 import {testnetBradbury} from 'genlayer-js/chains';
-export const CONTRACT='0xB8a401d77631EC7A2182D5cAb06d03dc649fB7D7' as `0x${string}`;
+export const CONTRACT='0x1EACD7324A6BFAE87851e740706BB5f48EC4705F' as `0x${string}`;
 export const EXPLORER='https://explorer-bradbury.genlayer.com/transactions';
 const endpoint='https://rpc-bradbury.genlayer.com';
 const reader:any=createClient({chain:testnetBradbury,endpoint,account:createAccount()});let wallet:any;
