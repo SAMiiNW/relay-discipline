@@ -1,7 +1,7 @@
 {
-  "contract": "0x1d50D59fc9a795632De38B4Fa4C9633E9EC07A1D",
-  "deployTx": "0x8776e072c1e244ce8e88efa2dfbdf059d819e5a5fe7bd5e70d14718861f5cdfe",
-  "seedTx": "0x6f1d1b5556fe1b90d38ec06fafb19d825222c12a6e748e50055ff9d9822ad751",
+  "contract": "0x2c0fD207b7BD9F142E5477e6249a2daf887B3363",
+  "deployTx": "0xf1da08dfff5af2662a1763457c57a66f524b8a825db11c44e9394dfad73508e7",
+  "seedTx": "0x28370f52a843ed03a082c280f94457eb7abd3baa2e73bfe93623aa4422367c9d",
   "network": "testnet-bradbury",
   "version": "2.0",
   "deployer": "0xCAFA30BF94D4fb01146588a1b7901BD85E7DbD0f"

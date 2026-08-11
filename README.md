@@ -44,14 +44,14 @@ Once sealed, the packet cannot be edited into a safer-looking version.
 
 Consensus judges every outcome-driving field: protocol obligations, recipient class, objective, risks, dependencies, recovery, independently fetched evidence snapshots, and recipient attestation. The contract downgrades `READY` when obligations are missing, routing disagrees, or high-risk recovery is absent.
 
-Bradbury workflow verification: packet submission `0xe7d92647ff2947ed577ed41f59f96dbac861fa53c51c3c990449bc3173d7cff9`; validator inspection `0x004e023ca89dde21b73275f82559a877402b4c82184c43aacaf77b78a41012eb`.
+Bradbury workflow verification: packet submission `0xaea6f0b6d1fe5a8475a2b02728b8756e0a9ca44e569d816dab96a9253924a3c1`; validator inspection `0xb414b9b0bf1bf6b9c03f3c7735ca36f9899f6d5e6dbb351e81728c3ec48fb83f`.
 
 ## Deployed route
 
 **Bradbury Testnet · Chain `4221`**
 
 ```text
-Contract   0x1d50D59fc9a795632De38B4Fa4C9633E9EC07A1D
+Contract   0x2c0fD207b7BD9F142E5477e6249a2daf887B3363
 Protocol   ops-handoff-v1
 Deployer   0xCAFA30BF94D4fb01146588a1b7901BD85E7DbD0f
 Live App   https://relay-discipline.pages.dev
