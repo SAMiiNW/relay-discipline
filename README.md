@@ -51,7 +51,7 @@ Bradbury workflow verification: packet submission `0xe7d92647ff2947ed577ed41f59f
 **Bradbury Testnet · Chain `4221`**
 
 ```text
-Contract   0x1EACD7324A6BFAE87851e740706BB5f48EC4705F
+Contract   0x1d50D59fc9a795632De38B4Fa4C9633E9EC07A1D
 Protocol   ops-handoff-v1
 Deployer   0xCAFA30BF94D4fb01146588a1b7901BD85E7DbD0f
 Live App   https://relay-discipline.pages.dev
