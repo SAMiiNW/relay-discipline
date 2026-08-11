@@ -2,7 +2,7 @@
 import {createAccount,createClient} from 'genlayer-js';
 import {testnetBradbury} from 'genlayer-js/chains';
 export const CONTRACT='0x1EACD7324A6BFAE87851e740706BB5f48EC4705F' as `0x${string}`;
-export const EXPLORER='https://explorer-bradbury.genlayer.com/transactions';
+export const EXPLORER='https://explorer-bradbury.genlayer.com/tx';
 const endpoint='https://rpc-bradbury.genlayer.com';
 const reader:any=createClient({chain:testnetBradbury,endpoint,account:createAccount()});let wallet:any;let connectPromise:Promise<string>|null=null;
 const pause=(n:number)=>new Promise(r=>setTimeout(r,n));
